@@ -32,10 +32,10 @@ def search_for_files(target_str: list, root_dirs: list) -> set:
                 with open(os.path.join(root, file), 'r', encoding='utf-8') as search_file:
                     any_file_counter += 1
                     try:
-                        data = search_file.read()
+                        data = search_file.read() # Загружаем переменные из файла в переменную data
                         for item in target_str:
-                            if item in data:
-                                result_set.add(os.path.join(root, file))
+                            if (item in data and is_case_sensitive) or (item.lower() in data.lower() and not is_case_sensitive): # Проверка совпадений с учетом требований к регистру
+                                result_set.add(os.path.join(root, file)) # Добавляем в можество, если всё в порядке
                     except:
                         pass # Не удалось открыть - значит файл не текстовый и DeepSearch он не касается
 
@@ -44,7 +44,7 @@ def search_for_files(target_str: list, root_dirs: list) -> set:
         print(item)
 
     # Сколько файлов найдено?
-    print(f"{len(result_set)} файлов обнаружено") if result_set else print('Не обнаружено совпадений')
+    print(f"{len(result_set)} файлов с совпадениями обнаружено") if result_set else print('Не обнаружено совпадений')
     # Сколько файлов проанализировано?
     print(f'{any_file_counter} файлов проанализировано')
 
@@ -52,11 +52,19 @@ def search_for_files(target_str: list, root_dirs: list) -> set:
     return result_set
     
 
-# Запускаем поиск
+
+# === # Запускаем поиск # === #
+
+
+
+# Чувствителен ли поиск к РеГиСтРу? (указать ниже)
+is_case_sensitive = False
+
+# Вводить данные сюда, сверху слово для поиска, снизу директория поиска (можно вводить списком)
 search_for_files([ 
-        'arxaco'
+        'Deepsearch'
     ], 
     [
-        'C:/Users/arsen/AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang'
-    ]
+        "C:/Users/arsen/Desktop/DeepSearch"
+    ],
 )

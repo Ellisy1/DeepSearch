@@ -29,7 +29,7 @@ def search_for_files(target_str: list, root_dirs: list) -> set:
 
     any_file_counter = 0 # Счетчик всех проверенных файлов
     
-    # Устанавливаем переменную общего словаря. Она имеет вид [[path, ], [path, ]]
+    # Устанавливаем переменную общего словаря.
     result_dict = {}
 
     # === # Поиск # === #
@@ -41,7 +41,7 @@ def search_for_files(target_str: list, root_dirs: list) -> set:
             for file in files:
 
                 if also_search_in_filenames:
-                    for index, item in enumerate(target_str): # Пытаемся найти в названии файла нужное слово
+                    for item in target_str: # Пытаемся найти в названии файла нужное слово
                         if (item in file and is_case_sensitive) or (item.lower() in file.lower() and not is_case_sensitive):
 
                             if os.path.join(root, file) not in result_dict: result_dict[os.path.join(root, file)] = [] # Создаем пустое множество, если такового ещё нет
@@ -51,7 +51,7 @@ def search_for_files(target_str: list, root_dirs: list) -> set:
                     any_file_counter += 1
                     try:
                         data = search_file.read() # Загружаем переменные из файла в переменную data
-                        for index, item in enumerate(target_str):
+                        for item in target_str: # Цикл для каждого поискового слова
                             if (item in data and is_case_sensitive) or (item.lower() in data.lower() and not is_case_sensitive): # Проверка совпадений с учетом требований к регистру
 
                                 if os.path.join(root, file) not in result_dict: result_dict[os.path.join(root, file)] = [] # Создаем пустое множество, если такового ещё нет

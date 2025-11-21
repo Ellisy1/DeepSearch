@@ -2,6 +2,7 @@
 
 import os
 import tkinter as tk
+from tkinter import filedialog
 
 def check_for_data_availability(target_str: list, root_dirs: list) -> None:
     """Проверяем, не бред ли ввёл пользователь"""
@@ -69,27 +70,16 @@ def search_for_files(target_str: list, root_dirs: list) -> set:
     # Возварт (пока не имеет смысла, но может быть, в дальнейшим будет)
     return result_dict
 
-def apply_dark_theme(window):
+def choose_directory():
+    """Выбор директории поиска. Используется в UI DeepSearch"""
+    folder_path = filedialog.askdirectory(title="Выберите папку")
+    if folder_path:
+        entry_search_dir.delete(0, tk.END)
+        entry_search_dir.insert(0, folder_path)
 
-    # Определяем цвета для темной темы
-    BACKGROUND_COLOR = "gray12"  # Очень темный серый
-    FOREGROUND_COLOR = "white"
-
-    """Применяет темную тему к указанному окну и его потомкам."""
-    window.config(bg=BACKGROUND_COLOR)  # Устанавливаем цвет фона окна
-
-    for widget in window.winfo_children(): # проходимся по всем виджетам в окне
-        widget_class = widget.__class__.__name__
-        if widget_class == "Label":  # Настраиваем только Label
-            widget.config(bg=BACKGROUND_COLOR, fg=FOREGROUND_COLOR)
-        elif widget_class == "Button":
-            widget.config(bg="#333333", fg=FOREGROUND_COLOR, relief=tk.FLAT)
-        elif widget_class == "Entry":
-            widget.config(bg="#333333", fg=FOREGROUND_COLOR, insertbackground=FOREGROUND_COLOR) # insertbackground - цвет курсора
-
-        # Рекурсивно применяем тему к потомкам (если есть)
-        apply_dark_theme(widget)
-
+def start_search_from_ui_command():
+    """Запуск поиска, адаптированный под UI"""
+    search_for_files()
 
 
 # === # Запускаем поиск # === #
@@ -107,10 +97,17 @@ window = tk.Tk()
 window.title('DeepSearch')
 window.geometry("600x400")
 
-apply_dark_theme(window)
+label_search_dir = tk.Label(window, text='Директория поиска')
+label_search_dir.pack(anchor='nw')
 
-label = tk.Label(window, text='Раз два три', background="black",  foreground="white")
-label.pack(anchor='nw')
+entry_search_dir = tk.Entry(window, width=40)
+entry_search_dir.pack(anchor='nw')
+
+button_search_dir_pick_folder = tk.Button(window, text='Выбрать папку', command=choose_directory)
+button_search_dir_pick_folder.pack(anchor='nw')
+
+button_start_search = tk.Button(window, text='Выбрать папку', command=start_search_from_ui_command)
+button_start_search.pack(anchor='nw')
 
 window.mainloop()
 
